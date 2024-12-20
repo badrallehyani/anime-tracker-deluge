@@ -1,0 +1,97 @@
+.App {
+  text-align: center;
+}
+
+
+
+a{
+  /* Disable anchor tag underline */
+  text-decoration: none;
+}
+
+/* navbar */ 
+.navbar{
+  /* space between ceiling and navbar */
+  margin: 10px 0px;
+}
+
+.navbar-element{
+  /* Space between navbar elements */
+  color: black;
+  margin-left: 30px;
+}
+.active{
+  /* Active navbar element */
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+
+/* recent.js */
+.file-name{
+  width: 70%;
+}
+.file-date{
+  width: 20%;
+}
+
+/* Edit.js */
+.anime-name-and-submitter{
+  width: 40%;  
+}
+.anime-submitter{
+  font-weight: bold;
+
+  text-decoration: none;
+  color: black;
+}
+
+/* .anime-name{
+  cursor: pointer;
+} */
+.anime-completed{
+  width: 20%
+}
+.anime-path{
+  white-space: nowrap;
+  width: 30%;
+  overflow-x: hidden;
+  overflow-wrap: break-word;
+  
+  cursor: pointer;
+}
+.anime-path::-webkit-scrollbar {
+  display: none;
+}
+.anime-delete-button-container{
+  width: 10%;
+}
+.anime-delete-button{
+  width: 50%;
+}
+
+/* recent & Edit */
+.file-container:not(:last-child), .anime-container:not(:last-child){
+  border-bottom: 1px solid lightblue;
+}
+.all-files-container, .all-animes-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.file-container, .anime-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0px;
+  overflow-x: visible;
+}
+.file-container{
+  gap: 5%
+}
+/* Screen Responsiveness */
+@media only screen and (min-width: 600px) {
+  * {
+    font-size: 1.3rem;
+  }
+}

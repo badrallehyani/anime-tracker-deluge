@@ -1,0 +1,7 @@
+{
+    "sleep_between_updates": 1800,
+    "sleep_between_animes": 5,
+
+    "deluge_host": "localhost",
+    "deluge_port": 8112
+}
