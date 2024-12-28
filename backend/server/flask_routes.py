@@ -1,8 +1,5 @@
 import json
-from threading import Lock
-
-import flask_cors
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request
 
 from tracker_stuff.tracker import Tracker
 

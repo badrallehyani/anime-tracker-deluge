@@ -1,6 +1,5 @@
 import os, json
-from threading import Thread, Lock
-from flask import Flask
+from threading import Thread
 
 from server.app import get_flask_app
 from tracker_stuff.app import get_tracker_app
