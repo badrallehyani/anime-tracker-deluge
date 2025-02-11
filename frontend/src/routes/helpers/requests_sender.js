@@ -47,9 +47,24 @@ async function removeAnime(name){
     })
     
     const responseJSON = await response.json()
-    const animeList = responseJSON.anime_list
+    return responseJSON
+}
 
-    return animeList  
+async function editAnime(old_name, new_name, keyword, submitter, path){
+    const response = await fetch(BASE_URL + "edit_anime", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            old_name: old_name,
+            new_name: new_name,
+            keyword: keyword,
+            submitter: submitter,
+            path: path
+        })
+    })
+    
+    const responseJSON = await response.json()
+    return responseJSON
 }
 
 async function refresh(){
@@ -106,6 +121,7 @@ const reqSender = {
     clearRecent: clearRecent,
     getLogs: getLogs,
     clearLogs: clearLogs,
+    editAnime: editAnime
 }
 
 

@@ -84,7 +84,17 @@ class Tracker:
         
         data = self.get_data()
         
+        for anime in data.get("anime_list"):
+            if(anime.get("name") == name):
+                return {
+                    "ok": False, 
+                    "message": f"Anime {name} already exists",
+                    "anime_list": data.get("anime_list")
+                }
+        
         new_anime_list = data.get("anime_list")
+        
+        
         new_anime_list.append({
             "name": name,
             "keyword": keyword,
@@ -96,7 +106,11 @@ class Tracker:
         data.update({"anime_list": new_anime_list})
         self.update_data_file(data)
 
-        return data
+        return {
+            "ok": True, 
+            "message": f"Added {name}",
+            "anime_list": data.get("anime_list")
+        }
 
     def remove_anime(self, name):
         data = self.get_data()
@@ -106,7 +120,45 @@ class Tracker:
         data.update({"anime_list": new_anime_list})
         self.update_data_file(data)
 
-        return data
+        return {
+            "ok": True, 
+            "message": f"Removed {name}",
+            "anime_list": data.get("anime_list")
+        }
+    
+    def edit_anime(self, old_name, new_name, keyword, submitter, path):
+        data = self.get_data()
+        
+        anime_list: list[dict] = data.get("anime_list")
+        
+        for anime in data.get("anime_list"):
+            if(anime.get("name") == new_name):
+                return {
+                    "ok": False, 
+                    "message": f"Anime {new_name} already exists",
+                    "anime_list": data.get("anime_list")
+                }
+        
+        for anime in anime_list:
+            if(anime.get("name") == old_name):
+                anime.update(
+                    {
+                        "name": new_name, 
+                        "keyword": keyword, 
+                        "submitter": submitter, 
+                        "path": path
+                        # "done": done
+                    })
+                break
+            
+        data.update({"anime_list": anime_list})
+        self.update_data_file(data)
+        
+        return {
+                "ok": True, 
+                "message": f"Updated {old_name} to {new_name}",
+                "anime_list": data.get("anime_list")
+        }
 
     def get_data(self) -> dict:
         return json.load(open(self.data_file_name, 'r'))

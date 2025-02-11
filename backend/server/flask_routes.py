@@ -75,6 +75,24 @@ def create_main_routes_bp(t: Tracker):
             return "missing data (should be: name)"
 
         return json.dumps(t.remove_anime(name))
+    
+    @main_routes_bp.route('/edit_anime', methods = ['POST'])
+    def edit_anime():
+        if not request.is_json:
+            return "invalid json"
+
+        data: dict = request.get_json()
+
+        old_name = data.get('old_name')
+        new_name = data.get('new_name')
+        keyword = data.get('keyword')
+        submitter = data.get('submitter')
+        path = data.get('path')
+
+        if not all([old_name, new_name, keyword, submitter, path]):
+            return "missing data (should be: old_name, new_name, keyword, submitter, path)"
+
+        return json.dumps(t.edit_anime(old_name, new_name, keyword, submitter, path))
 
 
 

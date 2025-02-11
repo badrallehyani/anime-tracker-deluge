@@ -63,12 +63,42 @@ a{
 .anime-path::-webkit-scrollbar {
   display: none;
 }
-.anime-delete-button-container{
-  width: 10%;
+
+.anime-delete-button, .anime-edit-button{
+  width: 2rem;
+  height: 2rem;
+  margin: 0 0.5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .anime-delete-button{
-  width: 50%;
+  margin-left: 1.5rem;
 }
+
+.anime-editable{
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+.anime-editable-field{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.anime-editable-field > span{
+  font-size: 0.8rem;
+  font-weight: bold;
+  width: 100%;
+  text-align: start;
+}
+
+
 
 /* recent & Edit */
 .file-container:not(:last-child), .anime-container:not(:last-child){

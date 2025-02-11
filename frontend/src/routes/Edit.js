@@ -69,6 +69,9 @@ function Edit() {
                         fetchAnimeFunction = {fetchAnimeFunction}
                         removeAnime = {async (name)=>{
                             const response = await reqSender.removeAnime(name)
+                            if(response.ok){
+                                setAnimeList(response.anime_list)
+                            }
                             alert(JSON.stringify(response))
                         }}
                     />
