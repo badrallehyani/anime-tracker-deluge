@@ -39,7 +39,7 @@ def create_main_routes_bp(t: Tracker):
 
     @main_routes_bp.route('/refresh', methods = ['POST'])
     def refresh():
-        return t.download_new()
+        return json.dumps(t.download_new(), default=vars)
 
     @main_routes_bp.route('/clear_recent', methods = ['POST'])
     def clear_recent():
