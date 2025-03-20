@@ -1,4 +1,4 @@
-import os, json, time
+import os, json, time, traceback
 from threading import Lock
 
 import logging
@@ -43,7 +43,7 @@ class Tracker:
     def run_loop(self):
         while True:
             self.download_new()
-            print("Sleeping..")
+            logging.info("Sleeping..")
             with self.lock:
                 self.last_update = int(time.time())
                 self.next_update = int(self.last_update + self.sleep_between_updates)
@@ -131,13 +131,15 @@ class Tracker:
         
         anime_list: list[dict] = data.get("anime_list")
         
-        for anime in data.get("anime_list"):
-            if(anime.get("name") == new_name):
-                return {
-                    "ok": False, 
-                    "message": f"Anime {new_name} already exists",
-                    "anime_list": data.get("anime_list")
-                }
+        if(new_name != old_name):
+            # if name changed, check if new name already exists
+            for anime in data.get("anime_list"):
+                if(anime.get("name") == new_name):
+                    return {
+                        "ok": False, 
+                        "message": f"Anime {new_name} already exists",
+                        "anime_list": data.get("anime_list")
+                    }
         
         for anime in anime_list:
             if(anime.get("name") == old_name):
@@ -182,13 +184,13 @@ class Tracker:
                 anime.get("path")
             )
             
-            print(f"Processing {name}")
+            logging.info(f"Processing {name}")
             
             # Search for episodes using keyword and submitter name
             try:
                 result: list[NyaasiResult] = Nyaasi.searchByUser(keyword, submitter)
             except:
-                print("Failed")
+                logging.info("Failed")
                 failed_animes.append(anime)
                 continue
             
@@ -209,8 +211,11 @@ class Tracker:
         attempt to download them using self.send_to_downloader
         returns: list[tuple[dict, NyaasiResult]]
         '''
+        logging.info("Starting a new download_new()")
 
         new_files = self.get_new()
+        
+        logging.info("Attempting to download: " + json.dumps([  i[1].URL for i in new_files ]))
 
         success_files: list[tuple[dict, NyaasiResult]] = []
         
@@ -220,16 +225,22 @@ class Tracker:
             path = anime.get("path")
             torrent_file_url = result.links.get("torrent_file")
             
+            logging.info(f"Downloading {result.name}: {torrent_file_url}")
             try:
                 self.send_to_downloader(torrent_file_url, path)
+                logging.info("Success")
             except:
-                print("Failed Adding")
+                logging.info("Failed")
+                logging.info(traceback.format_exc())
                 continue
             
             success_files.append(file)
         
         self.update_data(success_files)
         self.add_to_recent(success_files)
+        
+        logging.info("download_new() finished")
+        
         return success_files
             
             

@@ -3,5 +3,6 @@
     "sleep_between_animes": 5,
 
     "deluge_host": "localhost",
-    "deluge_port": 8112
+    "deluge_port": 8112,
+    "deluge_password": "deluge"
 }

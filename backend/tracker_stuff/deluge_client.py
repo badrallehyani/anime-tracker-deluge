@@ -1,4 +1,4 @@
-import random
+import os, random, logging
 import json, requests
 
 
@@ -36,8 +36,13 @@ class MyDelugeClient:
     def __init__(self, host, port = 8112):
         self.base_url = f"http://{host}:{port}"
         self.json_url = self.base_url + "/json"
+        self.log_info = lambda message: \
+            logging.info("Deluge Client - " + message)
 
     def login(self, password):
+        self.password = password
+        self.log_info("Logging In with password: " + password)
+        
         data = {
             "id": random.randint(1, 100),
             "method": "auth.login",
@@ -46,6 +51,8 @@ class MyDelugeClient:
 
         self.session = requests.session()
         response: dict = self.session.post(self.json_url, json = data).json()
+        
+        self.log_info("Logging Response: " + str(response))
 
         return response
 
@@ -56,6 +63,15 @@ class MyDelugeClient:
 
         response: dict = self.send_download_torrent_from_url(download_url, req_id)
         if(response.get('error') != None):
+            error_code = response.get('error').get('code')
+            
+            if(error_code == 1):
+                # code1: Unauthenticated Login
+                self.log_info("Unauthenticated Login / Expired Session")
+                self.log_info("Starting new Session")
+                self.login(self.password)
+                raise Exception("Unauthenticated Login / Expired Session")
+            
             raise Exception("Error " + str(response))
         
         tmp_file_dir = response.get("result")
@@ -83,6 +99,14 @@ class MyDelugeClient:
             "id": req_id
         }
         response = self.session.post(self.json_url, json = data, timeout = 5).json()
+        
+        if(response.get('error') != None):
+            error = response.get('error')
+            self.log_info("Error in "
+                f"send_add_torrent({file_dir}, {options}"
+            )
+            raise Exception("Error in send_add_torrent: " + str(error))
+        
         return response
 
 
@@ -97,6 +121,7 @@ class MyDelugeClient:
         }
 
         response = self.session.post(self.json_url, json = data).json()
+        
         return response
     
     def send_get_torrent_info(self, file_dir, req_id):

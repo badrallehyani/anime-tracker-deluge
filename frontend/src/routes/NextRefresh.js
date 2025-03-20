@@ -37,10 +37,10 @@ function NextRefresh(){
         
         <div>
             <div>
-                Last Update: {toDate(lastUpdate)}
+                Last Update: { lastUpdate == -1? "Loading": toDate(lastUpdate)}
             </div>
             <div>
-                Next Update: {toDate(nextUpdate)}
+                Next Update: { nextUpdate == -1? "Loading": toDate(nextUpdate)}
             </div>
 
             <button onClick={refresh}>Refresh Now</button>
